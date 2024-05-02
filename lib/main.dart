@@ -31,11 +31,13 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Despesas Pessoais'),
       ),
-      body: const Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TransactionUser(),
-        ],
+      body: const SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TransactionUser(),
+          ],
+        ),
       ),
     );
   }
