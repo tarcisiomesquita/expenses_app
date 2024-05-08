@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:expenses_app/components/transaction_form.dart';
 import 'package:expenses_app/components/transaction_list.dart';
 import 'package:expenses_app/models/transaction.dart';
@@ -18,10 +17,42 @@ class ExpensesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData myTheme = ThemeData(
+      useMaterial3: true,
+      fontFamily: 'QuickSand',
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.deepPurple,
+        secondary: Colors.amber,
+        // onSecondary: Colors.red,
+      ),
+      textTheme: const TextTheme().copyWith(
+        titleLarge: const TextStyle(
+          fontFamily: 'OpenSans',
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.deepPurple,
+        titleTextStyle: TextStyle(
+          fontFamily: 'OpenSans',
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Colors.amber,
+        foregroundColor: Colors.white,
+      ),
+    );
+
     Intl.defaultLocale = 'pt_BR';
     initializeDateFormatting('pt_BR', null);
-    return const MaterialApp(
-      home: MyHomePage(),
+
+    return MaterialApp(
+      theme: myTheme,
+      home: const MyHomePage(),
     );
   }
 }
@@ -99,7 +130,9 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           _openTransactionModal(context);
         },
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
