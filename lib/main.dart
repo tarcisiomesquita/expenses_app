@@ -4,6 +4,7 @@ import 'package:expenses_app/components/transaction_form.dart';
 import 'package:expenses_app/components/transaction_list.dart';
 import 'package:expenses_app/models/transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
@@ -20,7 +21,6 @@ class ExpensesApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData myTheme = ThemeData(
       useMaterial3: true,
-      fontFamily: 'QuickSand',
       colorScheme: ColorScheme.fromSeed(
         seedColor: Colors.deepPurple,
         secondary: Colors.amber,
@@ -33,6 +33,7 @@ class ExpensesApp extends StatelessWidget {
           fontWeight: FontWeight.bold,
           color: Colors.black,
         ),
+        labelLarge: const TextStyle(fontWeight: FontWeight.bold),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.deepPurple,
@@ -46,12 +47,31 @@ class ExpensesApp extends StatelessWidget {
         backgroundColor: Colors.amber,
         foregroundColor: Colors.white,
       ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.deepPurple,
+          textStyle: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.deepPurple,
+          foregroundColor: Colors.white,
+          shape: const BeveledRectangleBorder(),
+          textStyle: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
     );
 
     Intl.defaultLocale = 'pt_BR';
     initializeDateFormatting('pt_BR', null);
 
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: const [Locale('pt', 'BR')],
       theme: myTheme,
       home: const MyHomePage(),
     );
@@ -85,14 +105,26 @@ class _MyHomePageState extends State<MyHomePage> {
       value: 211.30,
       date: DateTime.now().subtract(const Duration(days: 4)),
     ),
+    Transaction(
+      id: 't3',
+      title: 'Cartão de Crédito',
+      value: 100211.30,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't4',
+      title: 'Lanche',
+      value: 11.30,
+      date: DateTime.now(),
+    ),
   ];
 
-  void _addTransaction(String title, double value) {
+  void _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
       id: Random().nextDouble().toString(),
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: date,
     );
     setState(
       () {
@@ -102,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
-  _openTransactionModal(BuildContext context) {
+  void _openTransactionModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
@@ -140,7 +172,9 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Chart(_recentTransactions),
-            TransactionList(_transactions),
+            TransactionList(
+              _transactions,
+            ),
           ],
         ),
       ),

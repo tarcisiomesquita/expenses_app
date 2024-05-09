@@ -5,4 +5,4 @@ String formatCurrency(double value) => NumberFormat.currency(
       decimalDigits: 2,
     ).format(value);
 
-String formatDate(DateTime date) => DateFormat.yMMMd().format(date);
+String formatDate(DateTime date) => DateFormat('dd MMM y').format(date);
