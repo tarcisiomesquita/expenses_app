@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 
 class TransactionList extends StatelessWidget {
   const TransactionList(
-    this.transactions, {
+    this.transactions,
+    this.onRemove, {
     super.key,
   });
 
+  final void Function(String id) onRemove;
   final List<Transaction> transactions;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 300,
+      height: 520,
       child: transactions.isEmpty
           ? Column(
               children: [
@@ -57,6 +59,12 @@ class TransactionList extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       subtitle: Text(formatDate(tr.date)),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          onRemove(tr.id);
+                        },
+                      ),
                     ),
                   ),
                 );

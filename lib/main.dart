@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:expenses_app/components/chart.dart';
 import 'package:expenses_app/components/transaction_form.dart';
 import 'package:expenses_app/components/transaction_list.dart';
+import 'package:expenses_app/styles/app_themes.dart';
 import 'package:expenses_app/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -19,60 +20,17 @@ class ExpensesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData myTheme = ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
-        secondary: Colors.amber,
-        // onSecondary: Colors.red,
-      ),
-      textTheme: const TextTheme().copyWith(
-        titleLarge: const TextStyle(
-          fontFamily: 'OpenSans',
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-        labelLarge: const TextStyle(fontWeight: FontWeight.bold),
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.deepPurple,
-        titleTextStyle: TextStyle(
-          fontFamily: 'OpenSans',
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: Colors.amber,
-        foregroundColor: Colors.white,
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.deepPurple,
-          textStyle: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.deepPurple,
-          foregroundColor: Colors.white,
-          shape: const BeveledRectangleBorder(),
-          textStyle: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-
     Intl.defaultLocale = 'pt_BR';
     initializeDateFormatting('pt_BR', null);
 
     return MaterialApp(
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('pt', 'BR')],
-      theme: myTheme,
+      theme: AppThemes().myTheme,
       home: const MyHomePage(),
     );
   }
@@ -86,38 +44,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
-    Transaction(
-      id: 't0',
-      title: 'Conta Antiga',
-      value: 400.00,
-      date: DateTime.now().subtract(const Duration(days: 33)),
-    ),
-    Transaction(
-      id: 't1',
-      title: 'Novo Tênis de Corrida',
-      value: 310.76,
-      date: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Conta de Luz',
-      value: 211.30,
-      date: DateTime.now().subtract(const Duration(days: 4)),
-    ),
-    Transaction(
-      id: 't3',
-      title: 'Cartão de Crédito',
-      value: 100211.30,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't4',
-      title: 'Lanche',
-      value: 11.30,
-      date: DateTime.now(),
-    ),
-  ];
+  final List<Transaction> _transactions = [];
 
   void _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
@@ -132,6 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
     Navigator.of(context).pop();
+  }
+
+  void _removeTransaction(String id) {
+    setState(() {
+      _transactions.removeWhere((tr) => tr.id == id);
+    });
   }
 
   void _openTransactionModal(BuildContext context) {
@@ -163,7 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               _openTransactionModal(context);
             },
-            icon: const Icon(Icons.add),
+            icon: Icon(Icons.add,
+                color: Theme.of(context).appBarTheme.iconTheme?.color),
           ),
         ],
       ),
@@ -174,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Chart(_recentTransactions),
             TransactionList(
               _transactions,
+              _removeTransaction,
             ),
           ],
         ),
