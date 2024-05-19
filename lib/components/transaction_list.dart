@@ -15,7 +15,9 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 520,
+      height: (MediaQuery.of(context).size.height -
+              Scaffold.of(context).appBarMaxHeight!) *
+          0.7,
       child: transactions.isEmpty
           ? Column(
               children: [
@@ -60,7 +62,10 @@ class TransactionList extends StatelessWidget {
                       ),
                       subtitle: Text(formatDate(tr.date)),
                       trailing: IconButton(
-                        icon: const Icon(Icons.delete),
+                        icon: const Icon(
+                          Icons.delete,
+                          // color: Theme.of(context).colorScheme.error,
+                        ),
                         onPressed: () {
                           onRemove(tr.id);
                         },

@@ -5,6 +5,7 @@ import 'package:expenses_app/components/transaction_list.dart';
 import 'package:expenses_app/styles/app_themes.dart';
 import 'package:expenses_app/models/transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -90,7 +91,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Despesas Pessoais'),
+        title: Text(
+          'Despesas Pessoais',
+          style:
+              TextStyle(fontSize: MediaQuery.textScalerOf(context).scale(20)),
+        ),
         actions: [
           IconButton(
             onPressed: () {
