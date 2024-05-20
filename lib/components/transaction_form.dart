@@ -46,55 +46,59 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(labelText: 'Título'),
-            ),
-            TextField(
-              controller: _valueController,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              onSubmitted: (_) => _submitForm(),
-              decoration: const InputDecoration(labelText: 'Valor (R\$)'),
-            ),
-            Row(
-              children: [
-                Text(
-                  _selectedDate == null
-                      ? 'Nenhuma data selecionada!'
-                      : 'Data: ${formatDate(_selectedDate)}',
-                ),
-                const Spacer(),
-                TextButton(
-                  onPressed: _showDatePicker,
-                  style: Theme.of(context).textButtonTheme.style,
-                  child: const Text(
-                    'Selecionar data',
+    return LayoutBuilder(builder: (context, constraints) {
+      return Card(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+              10, 10, 10, 10 + MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _titleController,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(labelText: 'Título'),
+              ),
+              TextField(
+                controller: _valueController,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                onSubmitted: (_) => _submitForm(),
+                decoration: const InputDecoration(labelText: 'Valor (R\$)'),
+              ),
+              Row(
+                children: [
+                  Text(
+                    _selectedDate == null
+                        ? 'Nenhuma data selecionada!'
+                        : 'Data: ${formatDate(_selectedDate)}',
                   ),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  style: Theme.of(context).elevatedButtonTheme.style,
-                  child: const Text(
-                    'Nova transação',
+                  const Spacer(),
+                  TextButton(
+                    onPressed: _showDatePicker,
+                    style: Theme.of(context).textButtonTheme.style,
+                    child: const Text(
+                      'Selecionar data',
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: _submitForm,
+                    style: Theme.of(context).elevatedButtonTheme.style,
+                    child: const Text(
+                      'Nova transação',
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

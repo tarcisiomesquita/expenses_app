@@ -47,6 +47,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
 
+  bool _showChart = false;
+
   void _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
       id: Random().nextDouble().toString(),
@@ -70,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _openTransactionModal(BuildContext context) {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (_) {
         return TransactionForm(_addTransaction);
@@ -89,32 +92,57 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Despesas Pessoais',
-          style:
-              TextStyle(fontSize: MediaQuery.textScalerOf(context).scale(20)),
-        ),
-        actions: [
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    final appBar = AppBar(
+      title: Text(
+        'Despesas Pessoais',
+        style: TextStyle(fontSize: MediaQuery.textScalerOf(context).scale(20)),
+      ),
+      actions: [
+        if (isLandscape)
           IconButton(
             onPressed: () {
-              _openTransactionModal(context);
+              setState(() {
+                _showChart = !_showChart;
+              });
             },
-            icon: Icon(Icons.add,
-                color: Theme.of(context).appBarTheme.iconTheme?.color),
+            icon: _showChart
+                ? const Icon(Icons.list)
+                : const Icon(Icons.insert_chart_outlined_sharp),
           ),
-        ],
-      ),
+        IconButton(
+          onPressed: () {
+            _openTransactionModal(context);
+          },
+          icon: Icon(Icons.add,
+              color: Theme.of(context).appBarTheme.iconTheme?.color),
+        ),
+      ],
+    );
+
+    final availableHeight =
+        MediaQuery.of(context).size.height - appBar.preferredSize.height;
+
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(_recentTransactions),
-            TransactionList(
-              _transactions,
-              _removeTransaction,
-            ),
+            if (_showChart || !isLandscape)
+              SizedBox(
+                  height: availableHeight * (isLandscape ? 0.7 : 0.3),
+                  child: Chart(_recentTransactions)),
+            if (!_showChart || !isLandscape)
+              SizedBox(
+                height: availableHeight * 0.7,
+                child: TransactionList(
+                  _transactions,
+                  _removeTransaction,
+                ),
+              ),
           ],
         ),
       ),
