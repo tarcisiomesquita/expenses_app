@@ -1,11 +1,12 @@
 import 'dart:math';
+import 'dart:io';
+
 import 'package:expenses_app/components/chart.dart';
 import 'package:expenses_app/components/transaction_form.dart';
 import 'package:expenses_app/components/transaction_list.dart';
 import 'package:expenses_app/styles/app_themes.dart';
 import 'package:expenses_app/models/transaction.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -92,8 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
 
     final appBar = AppBar(
       title: Text(
@@ -123,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final availableHeight =
-        MediaQuery.of(context).size.height - appBar.preferredSize.height;
+        mediaQuery.size.height - appBar.preferredSize.height;
 
     return Scaffold(
       appBar: appBar,
@@ -133,11 +134,11 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             if (_showChart || !isLandscape)
               SizedBox(
-                  height: availableHeight * (isLandscape ? 0.7 : 0.3),
+                  height: availableHeight * (isLandscape ? 0.8 : 0.3),
                   child: Chart(_recentTransactions)),
             if (!_showChart || !isLandscape)
               SizedBox(
-                height: availableHeight * 0.7,
+                height: availableHeight * (isLandscape ? 1 : 0.7),
                 child: TransactionList(
                   _transactions,
                   _removeTransaction,
@@ -146,14 +147,16 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _openTransactionModal(context);
-        },
-        child: const Icon(
-          Icons.add,
-        ),
-      ),
+      floatingActionButton: Platform.isIOS
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                _openTransactionModal(context);
+              },
+              child: const Icon(
+                Icons.add,
+              ),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
