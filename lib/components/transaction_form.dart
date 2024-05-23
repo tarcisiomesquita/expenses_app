@@ -1,4 +1,3 @@
-import 'package:expenses_app/models/format_intl.dart';
 import 'package:flutter/material.dart';
 
 class TransactionForm extends StatefulWidget {
@@ -68,11 +67,7 @@ class _TransactionFormState extends State<TransactionForm> {
               ),
               Row(
                 children: [
-                  Text(
-                    _selectedDate == null
-                        ? 'Nenhuma data selecionada!'
-                        : 'Data: ${formatDate(_selectedDate)}',
-                  ),
+                  const Text('Nenhuma data selecionada!'),
                   const Spacer(),
                   TextButton(
                     onPressed: _showDatePicker,
