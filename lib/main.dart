@@ -142,8 +142,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         actions: actions);
 
-    final availableHeight =
-        mediaQuery.size.height - appBar.preferredSize.height;
+    final availableHeight = mediaQuery.size.height -
+        appBar.preferredSize.height -
+        mediaQuery.padding.top;
 
     final bodyPage = SafeArea(
       child: SingleChildScrollView(

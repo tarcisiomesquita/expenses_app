@@ -1,3 +1,5 @@
+import 'package:expenses_app/components/adaptative_button.dart';
+import 'package:expenses_app/components/adaptative_text_field.dart';
 import 'package:flutter/material.dart';
 
 class TransactionForm extends StatefulWidget {
@@ -53,40 +55,41 @@ class _TransactionFormState extends State<TransactionForm> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
+              AdaptativeTextField(
                 controller: _titleController,
+                keyboardType: TextInputType.text,
+                label: 'Título',
                 textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(labelText: 'Título'),
               ),
-              TextField(
+              AdaptativeTextField(
                 controller: _valueController,
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
+                label: 'Valor (R\$)',
                 onSubmitted: (_) => _submitForm(),
-                decoration: const InputDecoration(labelText: 'Valor (R\$)'),
               ),
-              Row(
-                children: [
-                  const Text('Nenhuma data selecionada!'),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: _showDatePicker,
-                    style: Theme.of(context).textButtonTheme.style,
-                    child: const Text(
-                      'Selecionar data',
-                    ),
-                  )
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  children: [
+                    const Text('Nenhuma data selecionada!'),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: _showDatePicker,
+                      style: Theme.of(context).textButtonTheme.style,
+                      child: const Text(
+                        'Selecionar data',
+                      ),
+                    )
+                  ],
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ElevatedButton(
+                  AdaptativeButton(
                     onPressed: _submitForm,
-                    style: Theme.of(context).elevatedButtonTheme.style,
-                    child: const Text(
-                      'Nova transação',
-                    ),
+                    label: 'Nova transação',
                   ),
                 ],
               ),
